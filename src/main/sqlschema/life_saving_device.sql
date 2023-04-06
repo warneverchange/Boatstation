@@ -11,3 +11,13 @@ create table life_saving_device(
     foreign key (life_saving_device_type_id) references life_saving_device_type(id),
     foreign key (watercraft_log_id) references watercraft_log(id)
 );
+
+alter table life_saving_device
+    add constraint
+        foreign key (life_saving_device_type_id) references life_saving_device_type (id)
+            on update cascade on delete restrict;
+
+alter table life_saving_device
+    add constraint
+        foreign key (watercraft_log_id) references watercraft_log (id)
+            on update cascade on delete restrict;

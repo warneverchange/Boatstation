@@ -17,3 +17,8 @@ create table employee_data(
     check ( passport_data regexp '[0-9]{10}'),
     check ( phone_number regexp '[0-9]{11,13}')
 );
+
+alter table employee_data
+    add constraint
+        foreign key (employee_job_title_id) references employee_data (id)
+            on update cascade on delete restrict;

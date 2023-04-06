@@ -33,3 +33,30 @@ create table rental_log
     foreign key (client_data_id) references client_data (id),
     foreign key (watercraft_log_id) references watercraft_log (id)
 );
+
+
+alter table watercraft_log
+    add constraint
+        foreign key (water_id) references water (id)
+            on update cascade on delete restrict;
+alter table watercraft_log
+    add constraint
+        foreign key (technical_condition_id) references technical_condition (id)
+            on update cascade on delete restrict;
+alter table watercraft_log
+    add constraint
+        foreign key (watercraft_id) references watercraft (id)
+            on update cascade on delete restrict;
+
+
+alter table rental_log
+    add constraint
+        foreign key (client_data_id) references client_data (id)
+            on update cascade on delete restrict;
+
+alter table rental_log
+    add constraint
+        foreign key (watercraft_log_id) references watercraft_log (id)
+            on update cascade on delete restrict;
+
+

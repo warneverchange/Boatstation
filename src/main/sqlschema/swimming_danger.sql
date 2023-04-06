@@ -14,6 +14,22 @@ create table swimming_danger (
     foreign key (swimming_danger_type_id) references swimming_danger_type(id)
 );
 
+alter table swimming_danger
+    add constraint
+        foreign key (water_id) references water (id)
+            on update cascade on delete restrict;
+
+
+alter table swimming_danger
+    add constraint
+        foreign key (watercraft_type_id) references watercraft_type (id)
+            on update cascade on delete restrict;
+
+alter table swimming_danger
+    add constraint
+        foreign key (swimming_danger_type_id) references swimming_danger_type (id)
+            on update cascade on delete restrict;
+
 
 
 

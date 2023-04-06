@@ -31,3 +31,13 @@ create table watercraft
     foreign key (watercraft_type_id) references watercraft_type (id),
     index (issue_year)
 );
+
+alter table watercraft
+    add constraint
+        foreign key (model_id) references model (id)
+            on update cascade on delete restrict;
+
+alter table watercraft
+    add constraint
+        foreign key (watercraft_type_id) references watercraft_type (id)
+            on update cascade on delete restrict;

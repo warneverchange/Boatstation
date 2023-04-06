@@ -13,3 +13,8 @@ create table water
     foreign key (water_type_id) references water_type (id),
     index (name)
 );
+
+alter table water
+    add constraint
+        foreign key (water_type_id) references water_type (id)
+            on update cascade on delete restrict;
