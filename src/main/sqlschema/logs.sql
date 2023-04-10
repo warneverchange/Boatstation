@@ -9,9 +9,9 @@ create table watercraft_log
 (
     id                     int unsigned not null primary key auto_increment,
     watercraft_number      varchar(11)  not null unique,
-    water_id               int unsigned unique,
-    technical_condition_id int unsigned not null unique,
-    watercraft_id          int unsigned not null unique,
+    water_id               int unsigned,
+    technical_condition_id int unsigned not null,
+    watercraft_id          int unsigned not null,
     foreign key (water_id) references water (id),
     foreign key (technical_condition_id) references technical_condition (id),
     foreign key (watercraft_id) references watercraft (id),
@@ -23,40 +23,24 @@ create table watercraft_log
 );
 
 
+create table rental_status
+(
+    id   int unsigned not null primary key auto_increment,
+    name varchar(32)  not null unique
+);
+
 create table rental_log
 (
     id                int unsigned not null primary key auto_increment,
     date              datetime     not null default current_timestamp(),
     duration          time         not null,
-    client_data_id    int unsigned not null unique,
-    watercraft_log_id int unsigned not null unique,
+    client_data_id    int unsigned not null,
+    watercraft_log_id int unsigned not null,
+    rental_status_id  int unsigned not null,
     foreign key (client_data_id) references client_data (id),
     foreign key (watercraft_log_id) references watercraft_log (id)
 );
 
 
-alter table watercraft_log
-    add constraint
-        foreign key (water_id) references water (id)
-            on update cascade on delete restrict;
-alter table watercraft_log
-    add constraint
-        foreign key (technical_condition_id) references technical_condition (id)
-            on update cascade on delete restrict;
-alter table watercraft_log
-    add constraint
-        foreign key (watercraft_id) references watercraft (id)
-            on update cascade on delete restrict;
-
-
 alter table rental_log
-    add constraint
-        foreign key (client_data_id) references client_data (id)
-            on update cascade on delete restrict;
-
-alter table rental_log
-    add constraint
-        foreign key (watercraft_log_id) references watercraft_log (id)
-            on update cascade on delete restrict;
-
-
+add constraint foreign key (rental_status_id) references rental_status(id);

@@ -11,14 +11,9 @@ create table employee_data(
     patronymic varchar(256),
     passport_data varchar(10) not null unique ,
     phone_number varchar(13) not null unique ,
-    employee_job_title_id int unsigned not null unique,
+    employee_job_title_id int unsigned not null ,
     foreign key (employee_job_title_id) references employee_job_title(id),
     index (first_name, last_name, patronymic),
     check ( passport_data regexp '[0-9]{10}'),
     check ( phone_number regexp '[0-9]{11,13}')
 );
-
-alter table employee_data
-    add constraint
-        foreign key (employee_job_title_id) references employee_data (id)
-            on update cascade on delete restrict;
