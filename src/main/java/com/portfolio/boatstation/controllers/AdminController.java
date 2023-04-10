@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class AdminController {
         this.adminPanel = adminPanel;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/rental")
     public ResponseEntity<List<RentalTableRecord>> getRentalData() {
         return new ResponseEntity<>(adminPanel.getRentalTableData() ,HttpStatus.OK);
