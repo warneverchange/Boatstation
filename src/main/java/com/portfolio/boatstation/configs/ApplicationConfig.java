@@ -1,7 +1,7 @@
 package com.portfolio.boatstation.configs;
 
-import com.portfolio.boatstation.entities.views.security.User;
-import com.portfolio.boatstation.excpetions.UserNotFoundException;
+import com.portfolio.boatstation.entities.security.User;
+import com.portfolio.boatstation.exceptions.UserNotFoundException;
 import com.portfolio.boatstation.repositories.security.UserRepository;
 import com.portfolio.boatstation.services.security.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +12,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Optional;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class ApplicationConfig {
     @Autowired
     private UserRepository userRepository;

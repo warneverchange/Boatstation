@@ -14,4 +14,6 @@ create table swimming_danger (
     foreign key (swimming_danger_type_id) references swimming_danger_type(id)
 );
 
+select * from _rental_log;
+
 

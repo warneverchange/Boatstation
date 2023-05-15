@@ -43,4 +43,21 @@ create table rental_log
 
 
 alter table rental_log
-add constraint foreign key (rental_status_id) references rental_status(id);
+    rename column duration to date_to;
+
+alter table rental_log
+    rename column date to date_from;
+
+alter table rental_log
+    modify column date_to datetime not null ;
+
+
+select * from _rental_log;
+
+alter table rental_log
+add foreign key (watercraft_log_id) references watercraft_log(id)
+on update cascade on delete set null ;
+
+
+alter table  rental_log
+modify column watercraft_log_id int unsigned;

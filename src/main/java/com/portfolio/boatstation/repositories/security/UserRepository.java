@@ -1,14 +1,16 @@
 package com.portfolio.boatstation.repositories.security;
 
-import com.portfolio.boatstation.entities.views.security.User;
+import com.portfolio.boatstation.entities.security.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @org.springframework.stereotype.Repository
+@Transactional
 public interface UserRepository extends Repository<User, Long> {
 
     @Query(value = "select * from _user where username = :username ", nativeQuery = true)
@@ -32,4 +34,12 @@ public interface UserRepository extends Repository<User, Long> {
             " _user_role_id = :#{#user.userRoleId} and" +
             " client_data_id = :#{#user.clientDataId}", nativeQuery = true)
     Optional<Long> getUserIdByUser(User user);
+
+
+    @Query(value="select client_data_id from _user where username = :username", nativeQuery = true)
+    Optional<Long> getClientDataIdByUsername(String username);
+
+    @Modifying
+    @Query(value = "delete from _user where id = :currentUserId", nativeQuery = true)
+    void deleteUserAccountById(Long currentUserId);
 }

@@ -1,7 +1,7 @@
 package com.portfolio.boatstation.repositories.security;
 
 
-import com.portfolio.boatstation.entities.views.security.Role;
+import com.portfolio.boatstation.entities.security.Role;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;

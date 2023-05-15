@@ -1,5 +1,4 @@
 package com.portfolio.boatstation.services.security;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "244226452948404D635166546A576D5A7134743777217A25432A462D4A614E64";
-    private static final  Long expirationDeltaTime = 1024L * 1024L * 60L * 24L;
+    private static final Long expirationDeltaTime = 1024L * 1024L * 60L * 24L;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -45,6 +45,16 @@ public class JwtService {
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
+                .claim(
+                        "is_admin",
+                        userDetails
+                                .getAuthorities()
+                                .stream()
+                                .anyMatch(
+                                        (grantedAuthority) ->
+                                                grantedAuthority
+                                                        .getAuthority()
+                                                        .equals("ADMIN")))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationDeltaTime))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

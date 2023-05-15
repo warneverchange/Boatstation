@@ -1,13 +1,17 @@
 package com.portfolio.boatstation.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "client_data", schema = "boatstation")
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
