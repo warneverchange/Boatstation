@@ -3,7 +3,7 @@ import { TableQuery } from "../helpers/TableQuery"
 import { Fragment } from "react";
 import { useFetching } from "../../hooks/useFetching";
 import LifeSavingDevices from "../../queries/LifeSavingDevices";
-import { Button, Grid } from "@mui/material";
+import { Button, Container, Grid } from "@mui/material";
 import DialogForm from "../helpers/DialogForm";
 
 export const LifeSavingDevicesManagingComponent = () => {
@@ -37,54 +37,60 @@ export const LifeSavingDevicesManagingComponent = () => {
 
     return (
         <Fragment>
-            <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-            >
-                <TableQuery
-                    ref={tableRef}
-                    getRowsIdCallback={(obj) => obj._id}
-                    callback={LifeSavingDevices.getAllLifeSavingDevices}
-                    widthComponents={{
-                        name: 300
-                    }}
-                    proccessRowUpdate={(newRow, oldRow) => {
-                        const updatedRow = { ...newRow, isNew: true }
-                        return updatedRow
-                    }}
+            <Container>
+                <Grid
+                    container
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
                 >
-                </TableQuery>
-                <Button variant="contained" sx={{mt: 5}} onClick={() =>{
-                    dialogRef.current.setOpen(true);
-                }}>
-                    Add life saving device
-                </Button>
+                    <Grid item sx={{width: 700, mt: 15}}>
+                        <TableQuery
+                            ref={tableRef}
+                            getRowsIdCallback={(obj) => obj._id}
+                            callback={LifeSavingDevices.getAllLifeSavingDevices}
+                            widthComponents={{
+                                name: 400
+                            }}
+                            proccessRowUpdate={(newRow, oldRow) => {
+                                const updatedRow = { ...newRow, isNew: true }
+                                return updatedRow
+                            }}
+                        >
+                        </TableQuery>
+                    </Grid>
 
-                <DialogForm
-                ref={dialogRef}
-                onClose={onClose}
-                onSubmit={onSubmit}
-                title="Select life saving device type"
-                dialogElements={{
-                    elements: [
-                        {
-                            type: "selector",
-                            name: "Life saving device type",
-                            value: selectedLsdTypeId,
-                            getOptions: () => {return lsdType},
-                            showOption: (option) => {return option.name},
-                            getValue: (option) => {return option.id},
-                            onChange: (event) => setSelectedLsdTypeId(event.target.value),
-                            required: true
-                        }
-                    ]
-                }}
-                >
+                    <Button variant="contained" sx={{ mt: 5 }} onClick={() => {
+                        dialogRef.current.setOpen(true);
+                    }}>
+                        Add life saving device
+                    </Button>
 
-                </DialogForm>
-            </Grid>
+                    <DialogForm
+                        ref={dialogRef}
+                        onClose={onClose}
+                        onSubmit={onSubmit}
+                        title="Select life saving device type"
+                        dialogElements={{
+                            elements: [
+                                {
+                                    type: "selector",
+                                    name: "Life saving device type",
+                                    value: selectedLsdTypeId,
+                                    getOptions: () => { return lsdType },
+                                    showOption: (option) => { return option.name },
+                                    getValue: (option) => { return option.id },
+                                    onChange: (event) => setSelectedLsdTypeId(event.target.value),
+                                    required: true
+                                }
+                            ]
+                        }}
+                    >
+
+                    </DialogForm>
+                </Grid>
+            </Container>
+
         </Fragment>
     )
 }

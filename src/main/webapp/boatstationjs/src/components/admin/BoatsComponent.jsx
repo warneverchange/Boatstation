@@ -4,7 +4,7 @@ import { Watercraft } from "../../queries/Watercraft";
 import { Water } from "../../queries/Water";
 import { WatercraftLog } from "../../queries/WatercraftLog";
 import { TableQuery } from "../helpers/TableQuery";
-import { Button, IconButton } from "@mui/material";
+import { Button, Container, IconButton } from "@mui/material";
 import DialogForm from "../helpers/DialogForm";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,6 +14,7 @@ import { ListDialog } from "../helpers/ListDialog";
 import LifeSavingDevices from "../../queries/LifeSavingDevices";
 import { KeyboardBackspaceOutlined } from "@mui/icons-material";
 import SupportIcon from '@mui/icons-material/Support';
+import { Grid } from "@mui/material";
 
 
 
@@ -115,226 +116,241 @@ export const BoatsComponent = () => {
 
     return (
         <Fragment>
-            <TableQuery
-                ref={talbeRef}
-                callback={Watercraft.getWatercraftView}
-                customColumns={{
-                    technicalCondition: {
-                        editable: true,
-                        type: 'singleSelect',
-                        valueOptions: getColumnByColumnName(technicalConditionData, "name") //getTechnicalConditionNames(technicalConditionData)
-                    },
-                    editButton: {
-                        fieldName: "editBtn",
-                        renderCell: (params) => {
-                            return (
-                                <IconButton onClick={(event) => {
-                                    setWatercraftLogId(params.row.id);
-                                    setWaterTypeId(getFieldIdFromData(waterTypeData, "name", params.row.waterType))
-                                    setWaterId(getFieldIdFromData(waterData, "name", params.row.waterName))
-                                    setBrandId(getFieldIdFromData(brandData, "name", params.row.brandName))
-                                    setModelId(getFieldIdFromData(modelData, "name", params.row.modelName))
-                                    setWatercraftId(getFieldIdFromData(watercraftData, "issueYear", params.row.issueYear))
-                                    setTechnicalConditionId(getFieldIdFromData(technicalConditionData, "name", params.row.technicalCondition))
-                                    setWatercraftNumber(params.row.watercraftNumber)
-                                    dialogRef.current.setOpen(true)
-                                }}>
-                                    <EditIcon />
-                                </IconButton>
-                            )
-                        }
-                    },
+            <Container>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{mt: 15}}
+                >
+                    <Grid item xs={12}>
+                        <TableQuery
+                            ref={talbeRef}
+                            callback={Watercraft.getWatercraftView}
+                            customColumns={{
+                                technicalCondition: {
+                                    editable: true,
+                                    type: 'singleSelect',
+                                    valueOptions: getColumnByColumnName(technicalConditionData, "name") //getTechnicalConditionNames(technicalConditionData)
+                                },
+                                editButton: {
+                                    fieldName: "editBtn",
+                                    renderCell: (params) => {
+                                        return (
+                                            <IconButton onClick={(event) => {
+                                                setWatercraftLogId(params.row.id);
+                                                setWaterTypeId(getFieldIdFromData(waterTypeData, "name", params.row.waterType))
+                                                setWaterId(getFieldIdFromData(waterData, "name", params.row.waterName))
+                                                setBrandId(getFieldIdFromData(brandData, "name", params.row.brandName))
+                                                setModelId(getFieldIdFromData(modelData, "name", params.row.modelName))
+                                                setWatercraftId(getFieldIdFromData(watercraftData, "issueYear", params.row.issueYear))
+                                                setTechnicalConditionId(getFieldIdFromData(technicalConditionData, "name", params.row.technicalCondition))
+                                                setWatercraftNumber(params.row.watercraftNumber)
+                                                dialogRef.current.setOpen(true)
+                                            }}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        )
+                                    }
+                                },
 
-                    deleteButton: {
-                        fieldName: "delBtn",
-                        renderCell: (params) => {
-                            return (
-                                <IconButton onClick={async () => {
-                                    await WatercraftLog.deleteWatercraftLog(params.row.id)
-                                    talbeRef.current.updateTable();
-                                }}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            )
-                        }
-                    },
-                    lsDeviceButton: {
-                        fieldName: "lsDeviceBtn",
-                        renderCell: (params) => {
-                            return (
-                                <IconButton onClick={()=>{
-                                    setWatercraftLogId(params.row.id);
-                                    listDialogRef.current.setOpen(true);
-                                }}>
-                                    <SupportIcon/>
-                                </IconButton>
-                            )
-                        }
-                    }
-                }}
-                processRowUpdate={(newRow, oldRow) => {
-                    const updatedRow = { ...newRow, isNew: false }
-                    if (newRow.technicalCondition !== oldRow.technicalCondition) {
-                        WatercraftLog.updateTechnicalCondition(
-                            newRow.id,
-                            getFieldIdFromData(technicalConditionData, "name", newRow.technicalCondition)
-                        )
-                    }
+                                deleteButton: {
+                                    fieldName: "delBtn",
+                                    renderCell: (params) => {
+                                        return (
+                                            <IconButton onClick={async () => {
+                                                await WatercraftLog.deleteWatercraftLog(params.row.id)
+                                                talbeRef.current.updateTable();
+                                            }}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        )
+                                    }
+                                },
+                                lsDeviceButton: {
+                                    fieldName: "lsDeviceBtn",
+                                    renderCell: (params) => {
+                                        return (
+                                            <IconButton onClick={() => {
+                                                setWatercraftLogId(params.row.id);
+                                                listDialogRef.current.setOpen(true);
+                                            }}>
+                                                <SupportIcon />
+                                            </IconButton>
+                                        )
+                                    }
+                                }
+                            }}
+                            processRowUpdate={(newRow, oldRow) => {
+                                const updatedRow = { ...newRow, isNew: false }
+                                if (newRow.technicalCondition !== oldRow.technicalCondition) {
+                                    WatercraftLog.updateTechnicalCondition(
+                                        newRow.id,
+                                        getFieldIdFromData(technicalConditionData, "name", newRow.technicalCondition)
+                                    )
+                                }
 
-                    return updatedRow;
-                }}
+                                return updatedRow;
+                            }}
 
 
-                onProcessRowUpdateError={(err) => {
+                            onProcessRowUpdateError={(err) => {
 
-                }}
-            >
+                            }}
+                        >
 
-            </TableQuery>
+                        </TableQuery>
+                    </Grid>
 
-            {/* const [waterTypeId, setWaterTypeId] = useState('');
+
+                    {/* const [waterTypeId, setWaterTypeId] = useState('');
     const [waterId, setWaterId] = useState('');
     const [brandId, setBrandId] = useState('');
     const [modelId, setModelId] = useState('');
     const [watercraftId, setWatercraftId] = useState('')
     const [technicalConditionId, setTechnicalConditionId] = useState('');
     const [watercraftNumber, setWatercraftNumber] = useState(''); */}
-
-            <Button onClick={() => { dialogRef.current.setOpen(true) }} variant="contained">Create new watercraft log</Button>
-            <DialogForm
-                ref={dialogRef}
-                onClose={() => {
-                    setWatercraftLogId('')
-                    setWaterTypeId('')
-                    setWaterId('');
-                    setBrandId('')
-                    setModelId('')
-                    setWatercraftId('')
-                    setTechnicalConditionId('')
-                    setWatercraftNumber('')
-                }}
-                onSubmit={onSubmit}
-                title="Enter watercraft log data"
-                dialogElements={
-                    {
-                        elements: [
+                    <Grid item sx={{mt: 5}}>
+                        <Button onClick={() => { dialogRef.current.setOpen(true) }} variant="contained">Create new watercraft log</Button>
+                    </Grid>
+                    <DialogForm
+                        ref={dialogRef}
+                        onClose={() => {
+                            setWatercraftLogId('')
+                            setWaterTypeId('')
+                            setWaterId('');
+                            setBrandId('')
+                            setModelId('')
+                            setWatercraftId('')
+                            setTechnicalConditionId('')
+                            setWatercraftNumber('')
+                        }}
+                        onSubmit={onSubmit}
+                        title="Enter watercraft log data"
+                        dialogElements={
                             {
-                                type: "selector",
-                                name: "Water type",
-                                value: waterTypeId,
-                                getOptions: () => { return waterTypeData },
-                                showOption: (obj) => { return obj.name },
-                                getValue: (obj) => { return obj.id },
-                                onChange: (event) => { setWaterTypeId(Number(event.target.value) || '') },
-                                required: true
-                            },
-                            {
-                                type: "selector",
-                                name: "Water",
-                                value: waterId,
-                                getOptions: () => { return waterData.filter((obj) => { return obj.waterTypeId === waterTypeId }) },
-                                showOption: (obj) => { return obj.name },
-                                getValue: (obj) => { return obj.id },
-                                onChange: (event) => { setWaterId(Number(event.target.value) || '') },
-                                isDisabled: () => { return waterTypeId === '' },
-                                required: true
-                            },
-                            {
-                                type: "selector",
-                                name: "Brand",
-                                value: brandId,
-                                getOptions: () => { return brandData },
-                                showOption: (obj) => { return obj.name },
-                                getValue: (obj) => { return obj.id },
-                                onChange: (event) => { setBrandId(Number(event.target.value) || '') },
-                                required: true
-                            },
-                            {
-                                type: "selector",
-                                name: "Model",
-                                value: modelId,
-                                getOptions: () => { return modelData.filter((obj) => { return obj.brandId === brandId }) },
-                                showOption: (obj) => { return obj.name },
-                                getValue: (obj) => { return obj.id },
-                                onChange: (event) => { setModelId(Number(event.target.value) || '') },
-                                isDisabled: () => { return brandId === '' },
-                                required: true
-                            },
-                            {
-                                type: "selector",
-                                name: "Year",
-                                value: watercraftId,
-                                getOptions: () => { return watercraftData.filter((obj) => { return obj.modelId === modelId }) },
-                                showOption: (obj) => { return obj.issueYear },
-                                getValue: (obj) => { return obj.id },
-                                onChange: (event) => { setWatercraftId(Number(event.target.value) || '') },
-                                isDisabled: () => { return modelId === '' },
-                                required: true
-                            },
-                            {
-                                type: "selector",
-                                name: "Technical condition",
-                                value: technicalConditionId,
-                                getOptions: () => { return technicalConditionData },
-                                showOption: (obj) => { return obj.name },
-                                getValue: (obj) => { return obj.id },
-                                onChange: (event) => { setTechnicalConditionId(Number(event.target.value) || '') },
-                                required: true
-                            },
-                            {
-                                type: "textField",
-                                name: "Watercraft number: ",
-                                value: watercraftNumber,
-                                onChange: (event) => { setWatercraftNumber(event.target.value) },
-                                required: true
+                                elements: [
+                                    {
+                                        type: "selector",
+                                        name: "Water type",
+                                        value: waterTypeId,
+                                        getOptions: () => { return waterTypeData },
+                                        showOption: (obj) => { return obj.name },
+                                        getValue: (obj) => { return obj.id },
+                                        onChange: (event) => { setWaterTypeId(Number(event.target.value) || '') },
+                                        required: true
+                                    },
+                                    {
+                                        type: "selector",
+                                        name: "Water",
+                                        value: waterId,
+                                        getOptions: () => { return waterData.filter((obj) => { return obj.waterTypeId === waterTypeId }) },
+                                        showOption: (obj) => { return obj.name },
+                                        getValue: (obj) => { return obj.id },
+                                        onChange: (event) => { setWaterId(Number(event.target.value) || '') },
+                                        isDisabled: () => { return waterTypeId === '' },
+                                        required: true
+                                    },
+                                    {
+                                        type: "selector",
+                                        name: "Brand",
+                                        value: brandId,
+                                        getOptions: () => { return brandData },
+                                        showOption: (obj) => { return obj.name },
+                                        getValue: (obj) => { return obj.id },
+                                        onChange: (event) => { setBrandId(Number(event.target.value) || '') },
+                                        required: true
+                                    },
+                                    {
+                                        type: "selector",
+                                        name: "Model",
+                                        value: modelId,
+                                        getOptions: () => { return modelData.filter((obj) => { return obj.brandId === brandId }) },
+                                        showOption: (obj) => { return obj.name },
+                                        getValue: (obj) => { return obj.id },
+                                        onChange: (event) => { setModelId(Number(event.target.value) || '') },
+                                        isDisabled: () => { return brandId === '' },
+                                        required: true
+                                    },
+                                    {
+                                        type: "selector",
+                                        name: "Year",
+                                        value: watercraftId,
+                                        getOptions: () => { return watercraftData.filter((obj) => { return obj.modelId === modelId }) },
+                                        showOption: (obj) => { return obj.issueYear },
+                                        getValue: (obj) => { return obj.id },
+                                        onChange: (event) => { setWatercraftId(Number(event.target.value) || '') },
+                                        isDisabled: () => { return modelId === '' },
+                                        required: true
+                                    },
+                                    {
+                                        type: "selector",
+                                        name: "Technical condition",
+                                        value: technicalConditionId,
+                                        getOptions: () => { return technicalConditionData },
+                                        showOption: (obj) => { return obj.name },
+                                        getValue: (obj) => { return obj.id },
+                                        onChange: (event) => { setTechnicalConditionId(Number(event.target.value) || '') },
+                                        required: true
+                                    },
+                                    {
+                                        type: "textField",
+                                        name: "Watercraft number: ",
+                                        value: watercraftNumber,
+                                        onChange: (event) => { setWatercraftNumber(event.target.value) },
+                                        required: true
+                                    }
+                                ]
                             }
-                        ]
-                    }
-                }
-            >
+                        }
+                    >
 
-            </DialogForm>
+                    </DialogForm>
 
-            <ListDialog
-                ref={listDialogRef}
-                title="Life saving devices"
-                getItems={() => {
-                    return lifeSavingDevices.filter((item) => item.watercraftLogId === watercraftLogId);
-                }}
-                getAllItems={() => {
-                    return freeLifeSavingDevices;
-                }}
-                deleteItem={async (event) => {
-                    const lifeSavingDeviceLogId = event.target.id;
-                    console.log(event)
-                    await LifeSavingDevices.deleteLifeSavingDeviceLog(lifeSavingDeviceLogId);
-                    fetchLifeSavingDevices();
-                    fetchFreeLifeSavingDevices();
-                }}
-                showListItem={(item) => {
-                    return item.id + " " + item.lifeSavingDeviceType;
-                }}
-                getListItemId={(item) => {
-                    return item._id;
-                }}
-                showSelectorItem={(item) => {
-                    return item.id + " " + item.name;
-                }}
-                getSelectorItemId={(item) => {
-                    return item._id
-                }}
-                addItem={async (event) => {
-                    const lifeSavingDeviceId = event.target.id;
-                    await LifeSavingDevices.addLifeSavingDeviceLog(lifeSavingDeviceId, watercraftLogId);
-                    fetchLifeSavingDevices();
-                    fetchFreeLifeSavingDevices();
-                }}
-                onClose={() => {
-                    listDialogRef.current.setOpen(false);
-                    setWatercraftLogId('')
-                }}
-            >
-            </ListDialog>
+                    <ListDialog
+                        ref={listDialogRef}
+                        title="Life saving devices"
+                        getItems={() => {
+                            return lifeSavingDevices.filter((item) => item.watercraftLogId === watercraftLogId);
+                        }}
+                        getAllItems={() => {
+                            return freeLifeSavingDevices;
+                        }}
+                        deleteItem={async (event) => {
+                            const lifeSavingDeviceLogId = event.target.id;
+                            console.log(event)
+                            await LifeSavingDevices.deleteLifeSavingDeviceLog(lifeSavingDeviceLogId);
+                            fetchLifeSavingDevices();
+                            fetchFreeLifeSavingDevices();
+                        }}
+                        showListItem={(item) => {
+                            return item.id + " " + item.lifeSavingDeviceType;
+                        }}
+                        getListItemId={(item) => {
+                            return item._id;
+                        }}
+                        showSelectorItem={(item) => {
+                            return item.id + " " + item.name;
+                        }}
+                        getSelectorItemId={(item) => {
+                            return item._id
+                        }}
+                        addItem={async (event) => {
+                            const lifeSavingDeviceId = event.target.id;
+                            await LifeSavingDevices.addLifeSavingDeviceLog(lifeSavingDeviceId, watercraftLogId);
+                            fetchLifeSavingDevices();
+                            fetchFreeLifeSavingDevices();
+                        }}
+                        onClose={() => {
+                            listDialogRef.current.setOpen(false);
+                            setWatercraftLogId('')
+                        }}
+                    >
+                    </ListDialog>
+                </Grid>
+            </Container>
+
         </Fragment>
     )
 }

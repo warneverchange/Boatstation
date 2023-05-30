@@ -4,7 +4,7 @@ import Rental from "../../queries/Rental";
 import DataGridUtils from "../../utils/DataGridUtils";
 import { useRef } from "react";
 import { TableQuery } from "../helpers/TableQuery";
-import { IconButton, MenuItem, Select } from "@mui/material";
+import { Container, IconButton, MenuItem, Select } from "@mui/material";
 import dateFormat from "dateformat";
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import DialogForm from "../helpers/DialogForm";
@@ -14,6 +14,7 @@ import { Client } from "../../queries/Client";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadIcon from '@mui/icons-material/Download';
 import { downloadFile } from "../../utils/FileUtils";
+import { Grid } from "@mui/material";
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 
@@ -133,123 +134,137 @@ export const RentalComponent = () => {
     return (
 
         <Fragment>
-            <TableQuery
-                ref={tableRef}
-                getRowsIdCallback={(obj) => { return obj.id }}
-                callback={Rental.getAllRentalData}
-                customColumns={{
-                    // rentalStatus: {
-                    //     editable: true,
-                    //     type: 'singleSelect',
-                    //     valueOptions: getRentalStatusNames(rentalStatuses)
-                    // },
+            <Container>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{ mt: 15 }}
+                >
+                    <Grid item xs={12}>
+                        <TableQuery
+                            ref={tableRef}
+                            getRowsIdCallback={(obj) => { return obj.id }}
+                            callback={Rental.getAllRentalData}
+                            customColumns={{
+                                // rentalStatus: {
+                                //     editable: true,
+                                //     type: 'singleSelect',
+                                //     valueOptions: getRentalStatusNames(rentalStatuses)
+                                // },
 
-                    createReportBtn: {
-                        fieldName: "createReportButton",
-                        editable: true,
-                        renderCell: (props) => {
-                            if (props.row.rentalStatus === 'Бронь') {
-                                return (
-                                    <IconButton onClick={() => {
-                                        setSelectedRentalLogId(props.row.id);
-                                        dialogRef.current.setOpen(true);
-                                    }}>
+                                createReportBtn: {
+                                    fieldName: "createReportButton",
+                                    editable: true,
+                                    renderCell: (props) => {
+                                        if (props.row.rentalStatus === 'Бронь') {
+                                            return (
+                                                <IconButton onClick={() => {
+                                                    setSelectedRentalLogId(props.row.id);
+                                                    dialogRef.current.setOpen(true);
+                                                }}>
 
-                                        <SummarizeIcon />
-                                    </IconButton>
-                                )
-                            } else if (props.row.rentalStatus === 'Инструктаж') {
-                                return (
-                                    <IconButton component="label">
-                                        <input hidden accept="application/pdf" type="file" onChange={async (event) => {
-                                            console.log("upload btn pressed")
-                                            const file = event.target.files[0];
-                                            const briefingLogIdResponse = await Briefing.getBriefingLogIdByRentalLogId(props.row.id);
-                                            await Briefing.uploadReport(briefingLogIdResponse.data, file);
-                                            tableRef.current.updateTable();
-                                        }} />
-                                        <CloudUploadIcon />
-                                    </IconButton>
-                                )
-                            } else {
-                                return (
-                                    <IconButton onClick={async () => {
-                                        const briefingLogIdResponse = await Briefing.getBriefingLogIdByRentalLogId(props.row.id);
-                                        const reportDownloadReponse = await Briefing.downloadReport(briefingLogIdResponse.data);
-                                        downloadFile(reportDownloadReponse.data, "data.pdf")
-                                    }}>
-                                        <DownloadIcon />
-                                    </IconButton>
-                                )
+                                                    <SummarizeIcon />
+                                                </IconButton>
+                                            )
+                                        } else if (props.row.rentalStatus === 'Инструктаж') {
+                                            return (
+                                                <IconButton component="label">
+                                                    <input hidden accept="application/pdf" type="file" onChange={async (event) => {
+                                                        console.log("upload btn pressed")
+                                                        const file = event.target.files[0];
+                                                        const briefingLogIdResponse = await Briefing.getBriefingLogIdByRentalLogId(props.row.id);
+                                                        await Briefing.uploadReport(briefingLogIdResponse.data, file);
+                                                        tableRef.current.updateTable();
+                                                    }} />
+                                                    <CloudUploadIcon />
+                                                </IconButton>
+                                            )
+                                        } else {
+                                            return (
+                                                <IconButton onClick={async () => {
+                                                    const briefingLogIdResponse = await Briefing.getBriefingLogIdByRentalLogId(props.row.id);
+                                                    const reportDownloadReponse = await Briefing.downloadReport(briefingLogIdResponse.data);
+                                                    downloadFile(reportDownloadReponse.data, "data.pdf")
+                                                }}>
+                                                    <DownloadIcon />
+                                                </IconButton>
+                                            )
 
-                            }
+                                        }
 
-                        }
-                    }
-                }}
+                                    }
+                                }
+                            }}
 
-                widthComponents={{
-                    id: 50,
-                    dateFrom: 170
-                }}
+                            widthComponents={{
+                                id: 50,
+                                dateFrom: 170
+                            }}
 
-                renderCells={{
-                    dateFrom: (params) => {
-                        return dateFormat(new Date(params.row.dateFrom), "dd-mm-yyyy HH:MM")
-                    },
-                    dateTo: (params) => {
-                        return dateFormat(new Date(params.row.dateTo), "dd-mm-yyyy HH:MM")
-                    }
-                }}
-                processRowUpdate={(newRow, oldRow) => {
-                    const updatedRow = { ...newRow, isNew: false };
-                    Rental.updateRentalStatus(newRow.id, getRentalStatusIdByName(newRow.rentalStatus))
-                    return updatedRow
-                }}
-                onProcessRowUpdateError={(err) => {
-                    console.log(err)
-                }}>
-            </TableQuery>
+                            renderCells={{
+                                dateFrom: (params) => {
+                                    return dateFormat(new Date(params.row.dateFrom), "dd-mm-yyyy HH:MM")
+                                },
+                                dateTo: (params) => {
+                                    return dateFormat(new Date(params.row.dateTo), "dd-mm-yyyy HH:MM")
+                                }
+                            }}
+                            processRowUpdate={(newRow, oldRow) => {
+                                const updatedRow = { ...newRow, isNew: false };
+                                Rental.updateRentalStatus(newRow.id, getRentalStatusIdByName(newRow.rentalStatus))
+                                return updatedRow
+                            }}
+                            onProcessRowUpdateError={(err) => {
+                                console.log(err)
+                            }}>
+                        </TableQuery>
+                    </Grid>
 
 
-            <DialogForm
-                ref={dialogRef}
-                onClose={() => {
-                    setSelectedEmployeeId('');
-                    setSelectedBriefingTypeId('');
-                    setSelectedRentalLogId('');
-                }}
-                onSubmit={onReportDialogSubmit}
-                title="Report details"
-                dialogElements={{
-                    elements: [
 
-                        {
-                            type: "selector",
-                            name: "Briefing type",
-                            value: selectedBriefingTypeId,
-                            getOptions: () => { return briefingTypes },
-                            showOption: (option) => { return option.name },
-                            getValue: (option) => { return option.id },
-                            onChange: (event) => { setSelectedBriefingTypeId(event.target.value) },
-                            required: true
-                        },
-                        {
-                            type: "selector",
-                            name: "Employee",
-                            value: selectedEmployeeId,
-                            getOptions: () => { return employees.filter(empl => empl.jobTitle === 'Инструктор') },
-                            showOption: (option) => { return option.firstName + " " + option.lastName + " " + option.patronymic + " " + option.phoneNumber },
-                            getValue: (option) => { return option.clientDataId },
-                            onChange: (event) => { setSelectedEmployeeId(event.target.value) },
-                            required: true
-                        }
+                    <DialogForm
+                        ref={dialogRef}
+                        onClose={() => {
+                            setSelectedEmployeeId('');
+                            setSelectedBriefingTypeId('');
+                            setSelectedRentalLogId('');
+                        }}
+                        onSubmit={onReportDialogSubmit}
+                        title="Report details"
+                        dialogElements={{
+                            elements: [
 
-                    ]
-                }}
-            >
+                                {
+                                    type: "selector",
+                                    name: "Briefing type",
+                                    value: selectedBriefingTypeId,
+                                    getOptions: () => { return briefingTypes },
+                                    showOption: (option) => { return option.name },
+                                    getValue: (option) => { return option.id },
+                                    onChange: (event) => { setSelectedBriefingTypeId(event.target.value) },
+                                    required: true
+                                },
+                                {
+                                    type: "selector",
+                                    name: "Employee",
+                                    value: selectedEmployeeId,
+                                    getOptions: () => { return employees.filter(empl => empl.jobTitle === 'Инструктор') },
+                                    showOption: (option) => { return option.firstName + " " + option.lastName + " " + option.patronymic + " " + option.phoneNumber },
+                                    getValue: (option) => { return option.clientDataId },
+                                    onChange: (event) => { setSelectedEmployeeId(event.target.value) },
+                                    required: true
+                                }
 
-            </DialogForm>
+                            ]
+                        }}
+                    >
+
+                    </DialogForm>
+                </Grid>
+            </Container>
+
         </Fragment>
 
     )

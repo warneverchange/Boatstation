@@ -29,8 +29,24 @@ export const FormComponent = ({ elements, title }) => {
                             return (
                                 <Grid item xs={12} key={name + "griditem"}>
                                     <FormControl key={name + "formcontrol"} sx={{ m: 1, minWidth: 160 }}>
-                                        <InputLabel id={name + "lable"}>{name}</InputLabel>
+                                        <InputLabel sx={{color: "white"}} id={name + "lable"}>{name}</InputLabel>
                                         <Select
+                                            labelStyle={{ color: '#ff0000' }}
+                                            sx={{
+                                              color: "white",
+                                              '.MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'white',
+                                              },
+                                              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'white',
+                                              },
+                                              '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'white',
+                                              },
+                                              '.MuiSvgIcon-root ': {
+                                                fill: "white !important",
+                                              },
+                                            }}
                                             onChange={onChange}
                                             label={name}
                                             labelId={name + "lable"}
@@ -39,7 +55,6 @@ export const FormComponent = ({ elements, title }) => {
                                             required={required ?? false}
                                             value={value}
                                             autoWidth
-
                                         >
                                             {options?.map((option) => {
                                                 return (<MenuItem key={getValue(option)} value={getValue(option)}>{showOption(option)}</MenuItem>);

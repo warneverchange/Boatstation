@@ -53,13 +53,6 @@ from watercraft_log
          inner join watercraft_type wt on wc.watercraft_type_id = wt.id
 where tc.id = 3;
 
-
-select *
-from watercraft_log
-         inner join water w on watercraft_log.water_id = w.id
-         inner join water_type wt on w.water_type_id = wt.id
-         inner join watercraft;
-
 create or replace view watercrafts as
 select watercraft_log.id as id,
        t.name            as water_type,
@@ -163,3 +156,6 @@ create procedure getRentalData()
         update rental_log set rental_status_id = 2 where now() > date_to;
         select * from _rental_log;
     end;
+
+
+select water_type.* , brand.* from water_type, brand;

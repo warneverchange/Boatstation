@@ -12,5 +12,3 @@ create table employee_data(
     foreign key (employee_job_title_id) references employee_job_title(id)
 );
 
-
-drop table employee_data;

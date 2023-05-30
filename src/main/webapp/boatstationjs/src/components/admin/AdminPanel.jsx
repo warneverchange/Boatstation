@@ -22,6 +22,7 @@ import { Outlet } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import SupportIcon from '@mui/icons-material/Support';
 import HailIcon from '@mui/icons-material/Hail';
+import { Container } from 'react-bootstrap';
 
 
 const drawerWidth = 240;
@@ -32,8 +33,8 @@ export const AdminPanel = () => {
         { name: 'Rental', url: '/adminpanel/rental', listItemIcon: <TodayIcon /> },
         { name: 'Instruction report', url: '/adminpanel/report', listItemIcon: <SummarizeIcon /> },
         { name: 'Boat accounting', url: '/adminpanel/boats', listItemIcon: <DirectionsBoatIcon /> },
-        {name: "Life saving devices", url: "/adminpanel/lsdevices", listItemIcon: <SupportIcon/>},
-        {name: "Clients", url: "/adminpanel/clients", listItemIcon: <HailIcon/>}
+        { name: "Life saving devices", url: "/adminpanel/lsdevices", listItemIcon: <SupportIcon /> },
+        { name: "Clients", url: "/adminpanel/clients", listItemIcon: <HailIcon /> }
     ]
 
     const list = () => (
@@ -57,17 +58,20 @@ export const AdminPanel = () => {
     );
 
     return (
-        <Fragment>
-            <Drawer
-                variant="permanent"
-                sx={{
-                    width: drawerWidth,
-                }}
-            >
-                <Toolbar />
-                {list()}
-            </Drawer>
-            <Outlet/>
-        </Fragment>
+        <Container>
+            <Fragment>
+                <Drawer
+                    variant="permanent"
+                    sx={{
+                        width: drawerWidth,
+                    }}
+                >
+                    <Toolbar />
+                    {list()}
+                </Drawer>
+                <Outlet />
+            </Fragment>
+        </Container>
+
     );
 }

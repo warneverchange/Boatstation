@@ -1,6 +1,7 @@
-import { Button, TextField } from "@mui/material";
+import { Button, Container, TextField } from "@mui/material";
 import { useAuthenticationContext } from "./AuthenticationProvider";
 import { useNavigate } from "react-router-dom";
+import bgVideo from '../../videos/reg.mp4'
 
 const { Stack, Grid, Typography } = require("@mui/material");
 const { Fragment, useState } = require("react");
@@ -57,9 +58,9 @@ const RegistrationPage = () => {
                 </Grid>
                 <Grid item>
                     {columnName === 'Password' ?
-                        <TextField onChange={event => setState(event.target.value)} type="password" sx={{ width: 400 }} />
+                        <TextField onChange={event => setState(event.target.value)} type="password" sx={{ width: 400,  backgroundColor: "rgba(255, 255, 255, 0.2)" }} />
                         :
-                        <TextField onChange={event => setState(event.target.value)} sx={{ width: 400 }} />
+                        <TextField onChange={event => setState(event.target.value)} sx={{ width: 400, backgroundColor: "rgba(255, 255, 255, 0.2)" }} />
                     }
                 </Grid>
             </Fragment>);
@@ -67,47 +68,54 @@ const RegistrationPage = () => {
 
     return (
         <Fragment>
-            <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-                marginTop={1}
-            >
-                {inputFields}
-                <Grid item>
-                    <Grid
-                        container
-                        direction="row"
-                        justifyContent="space-evenly"
-                        alignItems="center"
-                        sx={{ mt: 5 }}
-                    >
-                        <Grid item>
-                            <Button
-                                size="large"
-                                variant="contained"
-                                sx={{ width: 190, mr: 5 }}
-                                onClick={() => authenticationContext.register(regData)}
-                            >
-                                Register
-                            </Button>
+            <div className="main">
+                <video style={{ width: "105%", height: "105%" }} src={bgVideo} autoPlay loop muted />
+                <div className="content">
+                    <Container>
+                        <Grid
+                            container
+                            direction="column"
+                            justifyContent="center"
+                            alignItems="center"
+                            spacing={2}
+                            marginTop={1}
+                        >
+                            {inputFields}
+                            <Grid item>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    sx={{ mt: 5 }}
+                                >
+                                    <Grid item>
+                                        <Button
+                                            size="large"
+                                            variant="contained"
+                                            sx={{ width: 190, mr: 5 }}
+                                            onClick={() => authenticationContext.register(regData)}
+                                        >
+                                            Register
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            size="large"
+                                            variant="contained"
+                                            sx={{ width: 190 }}
+                                            onClick={() => { navigate("/auth") }}
+                                        >
+                                            Back
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Button
-                                size="large"
-                                variant="contained"
-                                sx={{ width: 190 }}
-                                onClick={() => { navigate("/auth") }}
-                            >
-                                Back
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
 
+                    </Container>
+                </div>
+            </div>
         </Fragment>
     );
 }

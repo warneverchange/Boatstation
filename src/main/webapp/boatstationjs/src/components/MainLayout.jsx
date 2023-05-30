@@ -7,9 +7,7 @@ import Image from '../img/background_page.png'
 export const MainLayout = () => {
 
     return (
-        <Fragment sx={{backgroundImage: `url(${Image})`, backgroundSize: "cover",
-        height: "100vh",  color: "#f5f5f5"}}>
-
+        <Fragment>
             <Grid item xs={12}>
                 <Header />
             </Grid>

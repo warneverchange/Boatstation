@@ -26,7 +26,7 @@ const Header = () => {
 
     return (
         <React.Fragment>
-            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, }}>
                 <Toolbar>   
                     <DirectionsBoatIcon sx={{ transform: "scale(2)" }} />
                     <Icon s></Icon>
@@ -48,7 +48,6 @@ const Header = () => {
                             >
                                 <Tab label="Home" to="/" component={Link} />
                                 <Tab label="Rental" to="/rental" component={Link} />
-                                <Tab label="Career" to="/career" component={Link} />
                                 <Tab label="Contacts" to="/contacts" component={Link} />
                                 { authenticationContext.isAdmin &&
                                     <Tab label="Admin panel" to="/adminpanel" component={Link}/>

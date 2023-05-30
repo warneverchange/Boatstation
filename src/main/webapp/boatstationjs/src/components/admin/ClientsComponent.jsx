@@ -3,7 +3,7 @@ import { useFetching } from "../../hooks/useFetching";
 import { Employees } from "../../queries/Employees";
 import { TableQuery } from "../helpers/TableQuery";
 import { Client } from "../../queries/Client";
-import { Button, Grid, IconButton } from "@mui/material";
+import { Button, Container, Grid, IconButton } from "@mui/material";
 import DialogForm from "../helpers/DialogForm";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import BlockIcon from '@mui/icons-material/Block';
@@ -55,79 +55,82 @@ export const ClientsComponent = () => {
 
     return (
         <Fragment>
-            <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-            >
-                <Grid item>
-                    <TableQuery
-                        ref={tableRef}
-                        getRowsIdCallback={(obj) => { return obj.id }}
-                        callback={Client.getAllClients}
-                        customColumns={{
-                            isEmployee: {
-                                fieldName: "isEmployee",
-                                renderCell: (props) => {
-                                    if (employees.map((obj) => obj.clientDataId).includes(props.row.id)) {
-                                        return (
-                                            <IconButton onClick={async (event) => {
-                                                event.preventDefault();
-                                                const response = await Employees.fireEmployee(props.row.id)
-                                                tableRef.current.updateTable();
-                                                setUpdateTable(!updateTable);
-                                            }}>
-                                                <BlockIcon/>
-                                            </IconButton>
-                                        )
-                                    } else {
-                                        return (
-                                            <IconButton onClick={async () => {
-                                                setSelectedClientId(props.row.id)
-                                                dialogRef.current.setOpen(true);
-                                            }}>
-                                                <PersonAddAlt1Icon/>
-                                            </IconButton>
-                                        )
-                                    }
-                                },
-                            }
+            <Container>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{mt: 15}}
+                >
+                    <Grid item>
+                        <TableQuery
+                            ref={tableRef}
+                            getRowsIdCallback={(obj) => { return obj.id }}
+                            callback={Client.getAllClients}
+                            customColumns={{
+                                isEmployee: {
+                                    fieldName: "isEmployee",
+                                    renderCell: (props) => {
+                                        if (employees.map((obj) => obj.clientDataId).includes(props.row.id)) {
+                                            return (
+                                                <IconButton onClick={async (event) => {
+                                                    event.preventDefault();
+                                                    const response = await Employees.fireEmployee(props.row.id)
+                                                    tableRef.current.updateTable();
+                                                    setUpdateTable(!updateTable);
+                                                }}>
+                                                    <BlockIcon />
+                                                </IconButton>
+                                            )
+                                        } else {
+                                            return (
+                                                <IconButton onClick={async () => {
+                                                    setSelectedClientId(props.row.id)
+                                                    dialogRef.current.setOpen(true);
+                                                }}>
+                                                    <PersonAddAlt1Icon />
+                                                </IconButton>
+                                            )
+                                        }
+                                    },
+                                }
 
-                        }}
+                            }}
 
-                        proccessRowUpdate={(newRow, oldRow) => {
-                            const updatedRow = { ...newRow, isNew: true }
-                            return updatedRow
+                            proccessRowUpdate={(newRow, oldRow) => {
+                                const updatedRow = { ...newRow, isNew: true }
+                                return updatedRow
+                            }}
+                        >
+
+                        </TableQuery>
+                    </Grid>
+
+                    <DialogForm
+                        ref={dialogRef}
+                        onClose={onCloseDialog}
+                        onSubmit={onAddEmployeeHandler}
+                        title="Select job title"
+                        dialogElements={{
+                            elements: [
+                                {
+                                    type: "selector",
+                                    name: "Job title",
+                                    value: selectedJobTitleId,
+                                    getOptions: () => { return jobTitles },
+                                    showOption: (option) => { return option.name },
+                                    getValue: (option) => { return option.id },
+                                    onChange: (event) => { setSelectedJobTitleId(event.target.value) },
+                                    required: true
+                                }
+                            ]
                         }}
                     >
+                    </DialogForm>
 
-                    </TableQuery>
                 </Grid>
-
-                <DialogForm
-                    ref={dialogRef}
-                    onClose={onCloseDialog}
-                    onSubmit={onAddEmployeeHandler}
-                    title="Select job title"
-                    dialogElements={{
-                        elements: [
-                            {
-                                type: "selector",
-                                name: "Job title",
-                                value: selectedJobTitleId,
-                                getOptions: () => {return jobTitles},
-                                showOption: (option) => {return option.name},
-                                getValue: (option) => {return option.id},
-                                onChange: (event) => {setSelectedJobTitleId(event.target.value)},
-                                required: true
-                            }
-                        ]
-                    }}
-                >
-                </DialogForm>
-
-            </Grid>
+            </Container>
         </Fragment>
     )
 }

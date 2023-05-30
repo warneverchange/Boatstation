@@ -32,32 +32,11 @@ create table rental_status
 create table rental_log
 (
     id                int unsigned not null primary key auto_increment,
-    date              datetime     not null default current_timestamp(),
-    duration          time         not null,
+    date_from         datetime     not null default current_timestamp(),
+    date_to           datetime     not null,
     client_data_id    int unsigned not null,
-    watercraft_log_id int unsigned not null,
+    watercraft_log_id int unsigned,
     rental_status_id  int unsigned not null,
     foreign key (client_data_id) references client_data (id),
-    foreign key (watercraft_log_id) references watercraft_log (id)
+    foreign key (watercraft_log_id) references watercraft_log (id) on update cascade on delete set null
 );
-
-
-alter table rental_log
-    rename column duration to date_to;
-
-alter table rental_log
-    rename column date to date_from;
-
-alter table rental_log
-    modify column date_to datetime not null ;
-
-
-select * from _rental_log;
-
-alter table rental_log
-add foreign key (watercraft_log_id) references watercraft_log(id)
-on update cascade on delete set null ;
-
-
-alter table  rental_log
-modify column watercraft_log_id int unsigned;

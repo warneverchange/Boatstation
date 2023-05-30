@@ -1,12 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import { Grid } from "@mui/material";
-import { Container } from "@mui/material";
 import { AuthenticationProvider } from "./components/auth/AuthenticationProvider";
 import { MainLayout } from "./components/MainLayout";
 import { HomePage } from "./components/HomePage";
 import { RentalPage } from "./components/RentalPage";
 import { ContactsPage } from "./components/ContactsPage";
-import { CareerPage } from "./components/CareerPage";
 import { AuthRegPage } from "./components/auth/AuthRegPage";
 import RegistrationPage from "./components/auth/RegistrationPage";
 import { AuthenticationPage } from "./components/auth/AuthenticationPage";
@@ -22,7 +20,6 @@ import { ClientsComponent } from "./components/admin/ClientsComponent";
 
 export default function App(props) {
     return (
-        <Container >
             <Grid container spacing={2} >
                 <AuthenticationProvider>
                     <Routes>
@@ -30,7 +27,6 @@ export default function App(props) {
                             <Route index element={<HomePage />} />
                             <Route path="rental" element={<RentalPage />} />
                             <Route path="contacts" element={<ContactsPage />} />
-                            <Route path="career" element={<CareerPage />} />
                             <Route path="adminpanel" element={<AdminPanel />}>
                                 <Route index element={<Navigate to="/adminpanel/rental" />} />
                                 <Route path="rental" element={<RentalComponent />} />
@@ -48,9 +44,6 @@ export default function App(props) {
                     </Routes>
                 </AuthenticationProvider>
             </Grid>
-
-        </Container >
-
 
     );
 }

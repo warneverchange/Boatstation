@@ -1,9 +1,10 @@
 import { Fragment, useState } from "react";
 import { useFetching } from "../hooks/useFetching"
 import { User } from "../queries/User";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { AppBar, Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/material";
 import { useAuthenticationContext } from "./auth/AuthenticationProvider";
+import bgVideo from "../videos/reg.mp4"
 
 const FieldLabels = {
     firstName: "First name",
@@ -27,71 +28,79 @@ export const ProfilePage = () => {
     }, [])
 
     return (
-        <Fragment>
+        <div className="main">
+            <video src={bgVideo} autoPlay loop muted />
+            <div className="content">
+                <Container>
+                    <Fragment>
 
-            <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={5}
-                marginTop={15}
-            >
+                        <Grid
+                            container
+                            direction="column"
+                            justifyContent="center"
+                            alignItems="center"
+                            spacing={2}
+                            marginTop={5}
+                        >
 
 
-                {Object.keys(currentUserData).length !== 0 &&
+                            {Object.keys(currentUserData).length !== 0 &&
 
-                    Object.keys(currentUserData).map((key) => {
-                        if (key !== "id") {
-                            return (
+                                Object.keys(currentUserData).map((key) => {
+                                    if (key !== "id") {
+                                        return (
+                                            <Fragment>
+                                                <Grid item>
+                                                    <Typography variant="h6">{FieldLabels[key]}</Typography>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField
+                                                        sx={{ width: 300, backgroundColor: "rgba(255, 255, 255, 0.5)" }}
+                                                        variant="outlined"
+                                                        defaultValue={currentUserData[key]}
+                                                        onChange={(event) => {
+                                                            let newValue = event.target.value;
+                                                            currentUserData[key] = newValue;
+                                                            setCurrentUserData(
+                                                                currentUserData
+                                                            )
+                                                        }}
+                                                    >
+                                                    </TextField>
+                                                </Grid>
+                                            </Fragment>
+                                        )
+                                    }
+
+                                })}
+
+                            <Grid item>
                                 <Grid
                                     container
-                                    direction="row"
-                                    justifyContent="center"
+                                    direction="column"
+                                    justifyContent="space-evenly"
                                     alignItems="center"
+                                    spacing={2}
                                 >
-                                    <Grid item xs={6}>
-                                        <Typography>{FieldLabels[key]}</Typography>
+                                    <Grid item>
+                                        <Button sx={{ width: 300 }} size="large" variant="contained" onClick={() => {
+                                            User.updateCurrentUserClientData(currentUserData);
+                                        }}>Save info</Button>
                                     </Grid>
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            variant="outlined"
-                                            defaultValue={currentUserData[key]}
-                                            onChange={(event) => {
-                                                let newValue = event.target.value;
-                                                currentUserData[key] = newValue;
-                                                setCurrentUserData(
-                                                    currentUserData
-                                                )
-                                            }}
-                                        >
-                                        </TextField>
+                                    <Grid item>
+                                        <Button sx={{ width: 300 }} size="large" variant="contained" onClick={() => {
+                                            User.deleteCurrentAccout();
+                                            authenticationContext.logout();
+                                        }}>Delete account</Button>
                                     </Grid>
                                 </Grid>
-                            )
-                        }
+                            </Grid>
 
-                    })}
+                        </Grid>
+                    </Fragment>
+                </Container>
+            </div>
+        </div>
 
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                >
-                    <Grid item xs={6}>
-                        <Button variant="outlined" onClick={() => {
-                            User.updateCurrentUserClientData(currentUserData);
-                        }}>Save info</Button>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Button variant="outlined" onClick={() => {
-                            User.deleteCurrentAccout();
-                            authenticationContext.logout();
-                        }}>Delete account</Button>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Fragment>
     )
 }
